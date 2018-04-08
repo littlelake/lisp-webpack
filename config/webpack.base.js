@@ -34,7 +34,7 @@ module.exports = {
       'spritesmith-generated', // webpack-spritesmith 生成所需文件的目录
     ],
     // 补全后缀名查找
-    extensions: ['.wasm', '.mjs', '.js', '.json', '.jsx']
+    extensions: ['.js', '.jsx']
   },
   module: {
     rules: [{

@@ -16,6 +16,11 @@ module.exports = merge(base, {
       'process.env.NODE_ENV': JSON.stringify(CONFIG.ALL_ENV.ENV_PROD)
     }),
     // js压缩
-    new UglifyJsPlugin()
+    new UglifyJsPlugin({
+      // 缓存处理
+      cache: true,
+      // 并行处理
+      parallel: true
+    })
   ]
 });
