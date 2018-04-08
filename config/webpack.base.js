@@ -6,9 +6,15 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 // webpack配置变量
 var CONFIG = require('./webpack.config');
 
+// 将ExtractTextPlugin定义部分抽离成公共，而且是在生产环境下使用
+const extractSass = new ExtractTextPlugin({
+  filename: "[name].[contenthash].css",
+  disable: process.env.NODE_ENV === CONFIG.ALL_ENV.ENV_DEV
+});
+
 module.exports = {
   entry: {
-    app: './src/index.js' // 这里可以修改，暂时默认入口文件为src下的index.js文件
+    app: './src/index.jsx' // 这里可以修改，暂时默认入口文件为src下的index.js文件
   },
   output: {
     filename: '[name].js', // 根据入口文件名来生成文件
@@ -29,12 +35,29 @@ module.exports = {
   },
   module: {
     rules: [{
+      test: /\.jsx?$/,
+      include: CONFIG.ALL_PATH.SRC,
+      exclude: CONFIG.ALL_PATH.NODE_MODULES,
+      use: ['babel-loader']
+    }, {
       test: /\.css$/,
       include: CONFIG.ALL_PATH.SRC,
       exclude: CONFIG.ALL_PATH.NODE_MODULES,
-      use: ExtractTextPlugin.extract({
+      use: extractSass.extract({
         fallback: "style-loader",
         use: "css-loader"
+      })
+    }, {
+      test: /\.scss$/,
+      include: CONFIG.ALL_PATH.SRC,
+      exclude: CONFIG.ALL_PATH.NODE_MODULES,
+      use: extractSass.extract({
+        fallback: 'style-loader',
+        use: [{
+          loader: 'css-loader'
+        }, {
+          loader: 'sass-loader'
+        }]
       })
     }]
   },
@@ -58,6 +81,6 @@ module.exports = {
       },
     }),
     // https://doc.webpack-china.org/plugins/extract-text-webpack-plugin/
-    new ExtractTextPlugin('[name][contenthash].css'),
+    extractSass,
   ]
 }

@@ -7,6 +7,8 @@ var base = require('./webpack.base');
 var CONFIG = require('./webpack.config');
 
 module.exports = merge(base, {
+  // 定义resourceMap
+  devtool: 'cheap-module-source-map',
   plugins: [
     // https://doc.webpack-china.org/plugins/define-plugin/
     // 定于全局变量
