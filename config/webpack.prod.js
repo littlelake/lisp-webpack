@@ -1,4 +1,6 @@
 var webpack = require('webpack');
+var UglifyJsPlugin = require('uglify-js-plugin');
+
 // 用于合并webpack.base.js中的配置
 var merge = require('webpack-merge');
 
@@ -12,6 +14,8 @@ module.exports = merge(base, {
     // 定于全局变量
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(CONFIG.ALL_ENV.ENV_PROD)
-    })
+    }),
+    // js压缩
+    new UglifyJsPlugin()
   ]
 });

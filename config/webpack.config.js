@@ -2,6 +2,7 @@
  * @description 定义一些变量
  */
 var path = require('path');
+var ip = require('ip');
 
 module.exports = {
   // 所有关于环境的变量定义
@@ -17,7 +18,14 @@ module.exports = {
     // html-webpack-plugin中favicon的路径
     TEMPLATE_FAVICON: 'src/favicon.ico',
     // src的路径
-    SRC: path.resolve(__dirname, '../src')
-  }
-
+    SRC: path.resolve(__dirname, '../src'),
+    // ip地址
+    SERVER_HOST: ip.address() || 'localhost',
+    // 端口号
+    SERVER_PORT: process.env.PORT || 2222,
+  },
+  VENDOR: [
+    'react',
+    'react-dom',
+  ]
 }
