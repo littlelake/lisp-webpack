@@ -1,6 +1,10 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+// webpack配置变量
+var CONFIG = require('./webpack.config');
 
 module.exports = {
   entry: {
@@ -12,21 +16,48 @@ module.exports = {
   },
   resolve: {
     // 用于简化import时的路径
-    alias: {},
+    alias: {
+      'assets': path.resolve(__dirname, '../src/assets'),
+    },
     // 进行路径搜索，简化模块的查找，提升构建的速度
     modules: [
-      path.resolve(__dirname, 'node_modules'),
+      CONFIG.ALL_PATH.NODE_MODULES,
       'node_modules'
     ],
     // 补全后缀名查找
     extensions: ['.wasm', '.mjs', '.js', '.json', '.jsx']
   },
+  module: {
+    rules: [{
+      test: /\.css$/,
+      include: CONFIG.ALL_PATH.SRC,
+      exclude: CONFIG.ALL_PATH.NODE_MODULES,
+      use: ExtractTextPlugin.extract({
+        fallback: "style-loader",
+        use: "css-loader"
+      })
+    }]
+  },
   plugins: [
     // https://doc.webpack-china.org/plugins/html-webpack-plugin/
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: 'src/index.html',
-      favicon: 'src/favicon.ico'
+      template: CONFIG.ALL_PATH.TEMPLATE_HTML,
+      favicon: CONFIG.ALL_PATH.TEMPLATE_FAVICON,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      },
     }),
+    // https://doc.webpack-china.org/plugins/extract-text-webpack-plugin/
+    new ExtractTextPlugin('[name][contenthash].css'),
   ]
 }
