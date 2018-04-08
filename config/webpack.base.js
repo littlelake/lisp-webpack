@@ -8,7 +8,7 @@ module.exports = {
   },
   output: {
     filename: '[name].js', // 根据入口文件名来生成文件
-    path: path.resolve(__dirname, 'dist') // 输出的文件夹
+    path: path.resolve(__dirname, '../dist') // 输出的文件夹
   },
   resolve: {
     // 用于简化import时的路径
@@ -21,14 +21,12 @@ module.exports = {
     // 补全后缀名查找
     extensions: ['.wasm', '.mjs', '.js', '.json', '.jsx']
   },
-  module: {
-
-  },
-  plugin: [
+  plugins: [
     // https://doc.webpack-china.org/plugins/html-webpack-plugin/
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: '../src/index.html'
+      template: 'src/index.html',
+      favicon: 'src/favicon.ico'
     }),
   ]
 }
