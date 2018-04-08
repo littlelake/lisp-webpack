@@ -105,12 +105,12 @@ module.exports = {
     // https://www.npmjs.com/package/webpack-spritesmith
     new SpritesmithPlugin({
       src: {
-        cwd: path.resolve(__dirname, 'src/assets/sprites'), // 多个图片所在的目录
+        cwd: path.resolve(__dirname, '../src/assets/sprites'), // 多个图片所在的目录
         glob: '*.png' // 匹配图片路径
       },
       target: {
-        image: path.resolve(__dirname, 'src/assets/sprite.png'),
-        css: path.resolve(__dirname, 'src/assets/sprite.scss')
+        image: path.resolve(__dirname, '../src/assets/images/sprite.png'),
+        css: path.resolve(__dirname, '../src/assets/css/sprite.scss')
       },
       apiOptions: {
         cssImageRef: '~sprite.png'
