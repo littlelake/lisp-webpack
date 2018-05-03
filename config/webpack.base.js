@@ -15,17 +15,19 @@ const extractSass = new ExtractTextPlugin({
 
 module.exports = {
   entry: {
-    app: './src/index.jsx', // 这里可以修改，暂时默认入口文件为src下的index.js文件
+    app: './src/index.js', // 这里可以修改，暂时默认入口文件为src下的index.js文件
     vendor: CONFIG.VENDOR
   },
   output: {
     filename: '[name].js', // 根据入口文件名来生成文件
-    path: path.resolve(__dirname, '../dist') // 输出的文件夹
+    path: path.resolve(__dirname, '../dist'), // 输出的文件夹
+    publicPath: '/'
   },
   resolve: {
     // 用于简化import时的路径
     alias: {
       'assets': path.resolve(__dirname, '../src/assets'),
+      'utils': path.resolve(__dirname, '../src/utils'),
     },
     // 进行路径搜索，简化模块的查找，提升构建的速度
     modules: [
@@ -41,36 +43,64 @@ module.exports = {
       test: /\.jsx?$/,
       include: CONFIG.ALL_PATH.SRC,
       exclude: CONFIG.ALL_PATH.NODE_MODULES,
-      use: ['babel-loader']
+      use: [{
+        loader: 'babel-loader',
+        options: {
+          cacheDirectory: true,
+          plugins: [
+            ["import", {
+              libraryName: "antd",
+              style: "css"
+            }]
+          ]
+        }
+      }]
     }, {
-      test: /\.(png|jpe?g|gif|svg)$/,
+      test: /\.(png|jpe?g|gif|svg|eot|woff|ttf|woff2)(\?.*)?$/,
       use: [{
         loader: 'url-loader',
         options: {
           // 小于8Kb则以base64的形式输出，大于8KB则还是以之前的形式输出(8KB = 8*1024)
-          limit: 8192,
+          limit: 10000,
           name: 'images/[name][hash:8].[ext]'
         }
       }]
     }, {
-      test: /\.css$/,
-      include: CONFIG.ALL_PATH.SRC,
+      test: /\.scss$/,
       exclude: CONFIG.ALL_PATH.NODE_MODULES,
       use: extractSass.extract({
-        fallback: "style-loader",
-        use: "css-loader"
+        fallback: 'style-loader',
+        use: [{
+            loader: 'css-loader',
+            options: {
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true
+            }
+          }
+        ]
       })
     }, {
-      test: /\.scss$/,
-      include: CONFIG.ALL_PATH.SRC,
+      test: /\.less$/,
       exclude: CONFIG.ALL_PATH.NODE_MODULES,
       use: extractSass.extract({
         fallback: 'style-loader',
         use: [{
           loader: 'css-loader',
         }, {
-          loader: 'sass-loader'
+          loader: 'less-loader'
         }]
+      })
+    }, {
+      test: /\.css$/,
+      exclude: CONFIG.ALL_PATH.NODE_MODULES,
+      use: extractSass.extract({
+        fallback: "style-loader",
+        use: "css-loader"
       })
     }]
   },
