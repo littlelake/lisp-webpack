@@ -1,3 +1,4 @@
+var path = require('path');
 var webpack = require('webpack');
 var UglifyJsPlugin = require('uglify-js-plugin');
 
@@ -9,6 +10,16 @@ var base = require('./webpack.base');
 var CONFIG = require('./webpack.config');
 
 module.exports = merge(base, {
+  /**
+   * 输出 (Output)
+   * @see https://webpack.js.org/configuration/output/
+   */
+  output: {
+    path: path.resolve(__dirname, '../dist'), // 输出的文件夹
+    filename: '[name].[hash].bundle.js',
+    sourceMapFilename: '[name].[hash].bundle.map',
+    chunkFilename: '[name].[hash].chunk.js'
+  },
   plugins: [
     // https://doc.webpack-china.org/plugins/define-plugin/
     // 定于全局变量

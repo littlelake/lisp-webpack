@@ -22,7 +22,7 @@ module.exports = {
     // ip地址
     SERVER_HOST: ip.address() || 'localhost',
     // 端口号
-    SERVER_PORT: process.env.PORT || 2222,
+    SERVER_PORT: process.env.PORT || 3001,
   },
   VENDOR: [
     'react',
