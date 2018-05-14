@@ -26,12 +26,14 @@ module.exports = merge(base, {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(CONFIG.ALL_ENV.ENV_PROD)
     }),
+    // 通过计算模块出现次数来分配模块。通过这个插件webpack可以分析和优先考虑使用最多的模块，
+    // 并为它们分配最小的ID。这个经常被使用可以较快地获得模块。这使得模块可以预读，建议这样可以减少总文件大小。
+    new webpack.optimize.OccurrenceOrderPlugin(),
     // js压缩
     new UglifyJsPlugin({
-      // 缓存处理
-      cache: true,
-      // 并行处理
-      parallel: true
+      compress: {
+        warnings: false
+      }
     })
   ]
 });
