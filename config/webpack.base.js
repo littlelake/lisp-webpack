@@ -105,6 +105,10 @@ module.exports = {
     }]
   },
   plugins: [
+    new webpack.DllReferencePlugin({
+      context: path.join(__dirname, '..', 'dll'),
+      manifest: require('../dll/manifest.json'),
+    }),
     // https://doc.webpack-china.org/plugins/html-webpack-plugin/
     new HtmlWebpackPlugin({
       filename: 'index.html',

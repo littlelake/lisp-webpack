@@ -8,6 +8,7 @@
   "license": "MIT",
   "scripts": {
     "clean": "rimraf ./dist",
+    "prestart": "rimraf dll && webpack --config ./config/webpack.dll.js",
     "start": "webpack-dev-server --config ./config/webpack.dev.js --progress --open",
     "prebuild": "yarn clean",
     "build": "webpack --config ./config/webpack.prod.js --progress",
