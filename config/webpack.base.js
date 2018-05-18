@@ -85,10 +85,18 @@ module.exports = {
     }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     // https://doc.webpack-china.org/plugins/commons-chunk-plugin/
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'vendor', // 使用 vendor 入口作为公共部分
+    //   filename: 'vendor.js',
+    //   minChunks: Infinity // 这个配置会让 webpack 不再自动抽离公共模块 
+    // }),
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor', // 使用 vendor 入口作为公共部分
+      name: 'vendor',
       filename: 'vendor.js',
-      minChunks: Infinity // 这个配置会让 webpack 不再自动抽离公共模块 
+      minChunks: (module) => {
+        return module.context &&
+          module.context.indexOf('node_modules') >= 0;
+      }
     }),
     // https://www.npmjs.com/package/webpack-spritesmith
     // new SpritesmithPlugin({
