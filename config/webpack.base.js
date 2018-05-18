@@ -1,17 +1,10 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var SpritesmithPlugin = require('webpack-spritesmith');
 
 // webpack配置变量
 var CONFIG = require('./webpack.config');
-
-// 将ExtractTextPlugin定义部分抽离成公共，而且是在生产环境下使用
-const extractSass = new ExtractTextPlugin({
-  filename: "[name].[contenthash].css",
-  disable: process.env.NODE_ENV === CONFIG.ALL_ENV.ENV_DEV
-});
 
 module.exports = {
   entry: {
@@ -65,43 +58,6 @@ module.exports = {
           name: 'images/[name][hash:8].[ext]'
         }
       }]
-    }, {
-      test: /\.scss$/,
-      exclude: CONFIG.ALL_PATH.NODE_MODULES,
-      use: extractSass.extract({
-        fallback: 'style-loader',
-        use: [{
-            loader: 'css-loader',
-            options: {
-              sourceMap: true
-            }
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true
-            }
-          }
-        ]
-      })
-    }, {
-      test: /\.less$/,
-      exclude: CONFIG.ALL_PATH.NODE_MODULES,
-      use: extractSass.extract({
-        fallback: 'style-loader',
-        use: [{
-          loader: 'css-loader',
-        }, {
-          loader: 'less-loader'
-        }]
-      })
-    }, {
-      test: /\.css$/,
-      exclude: CONFIG.ALL_PATH.NODE_MODULES,
-      use: extractSass.extract({
-        fallback: "style-loader",
-        use: "css-loader"
-      })
     }]
   },
   plugins: [
@@ -127,8 +83,6 @@ module.exports = {
         minifyURLs: true,
       },
     }),
-    // https://doc.webpack-china.org/plugins/extract-text-webpack-plugin/
-    extractSass,
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     // https://doc.webpack-china.org/plugins/commons-chunk-plugin/
     new webpack.optimize.CommonsChunkPlugin({

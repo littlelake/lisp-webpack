@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var UglifyJsPlugin = require('uglify-js-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 // 用于合并webpack.base.js中的配置
 var merge = require('webpack-merge');
@@ -8,6 +9,12 @@ var merge = require('webpack-merge');
 var base = require('./webpack.base');
 // webpack配置变量
 var CONFIG = require('./webpack.config');
+
+// 将ExtractTextPlugin定义部分抽离成公共，而且是在生产环境下使用
+const extractSass = new ExtractTextPlugin({
+  filename: "[name].[contenthash].css",
+  disable: process.env.NODE_ENV === CONFIG.ALL_ENV.ENV_DEV
+});
 
 module.exports = merge(base, {
   /**
@@ -20,12 +27,54 @@ module.exports = merge(base, {
     sourceMapFilename: '[name].[hash].bundle.map',
     chunkFilename: '[name].[hash].chunk.js'
   },
+  module: {
+    rules: [{
+      test: /\.scss$/,
+      exclude: CONFIG.ALL_PATH.NODE_MODULES,
+      use: extractSass.extract({
+        fallback: 'style-loader',
+        use: [{
+            loader: 'css-loader',
+            options: {
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true
+            }
+          }
+        ]
+      })
+    }, {
+      test: /\.less$/,
+      exclude: CONFIG.ALL_PATH.NODE_MODULES,
+      use: extractSass.extract({
+        fallback: 'style-loader',
+        use: [{
+          loader: 'css-loader',
+        }, {
+          loader: 'less-loader'
+        }]
+      })
+    }, {
+      test: /\.css$/,
+      exclude: CONFIG.ALL_PATH.NODE_MODULES,
+      use: extractSass.extract({
+        fallback: "style-loader",
+        use: "css-loader"
+      })
+    }]
+  },
   plugins: [
     // https://doc.webpack-china.org/plugins/define-plugin/
     // 定于全局变量
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(CONFIG.ALL_ENV.ENV_PROD)
     }),
+    // https://doc.webpack-china.org/plugins/extract-text-webpack-plugin/
+    extractSass,
     // 通过计算模块出现次数来分配模块。通过这个插件webpack可以分析和优先考虑使用最多的模块，
     // 并为它们分配最小的ID。这个经常被使用可以较快地获得模块。这使得模块可以预读，建议这样可以减少总文件大小。
     new webpack.optimize.OccurrenceOrderPlugin(),

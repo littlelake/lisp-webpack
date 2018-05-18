@@ -9,6 +9,39 @@ var CONFIG = require('./webpack.config');
 module.exports = merge(base, {
   // 定义resourceMap
   devtool: 'cheap-module-source-map',
+  module: {
+    rules: [{
+      test: /\.scss$/,
+      exclude: CONFIG.ALL_PATH.NODE_MODULES,
+      use: [
+        'style-loader',
+        {
+          loader: 'css-loader',
+          options: {
+            sourceMap: true
+          }
+        },
+        {
+          loader: 'sass-loader',
+          options: {
+            sourceMap: true
+          }
+        }
+      ]
+    }, {
+      test: /\.less$/,
+      exclude: CONFIG.ALL_PATH.NODE_MODULES,
+      use: [
+        'style-loader',
+        'css-loader',
+        'less-loader'
+      ]
+    }, {
+      test: /\.css$/,
+      exclude: CONFIG.ALL_PATH.NODE_MODULES,
+      use: ['style-loader', 'css-loader']
+    }]
+  },
   plugins: [
     // https://doc.webpack-china.org/plugins/define-plugin/
     // 定于全局变量
