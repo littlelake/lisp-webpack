@@ -1,0 +1,63 @@
+@import './mixin.scss';
+@import './modify.scss';
+
+// 根元素大小使用 vw 单位
+$vm_design: 750;
+html {
+  font-size: ($vm_fontsize / $vm_design) * 100vw; 
+  // 同时，通过Media Queries 限制根元素最大最小值
+  @media screen and (max-width: 320px) {
+    font-size: 64px;
+  }
+  @media screen and (min-width: 540px) {
+    font-size: 108px;
+  }
+}
+// body 也增加最大最小宽度限制，避免默认100%宽度的 block 元素跟随 body 而过大过小
+body {
+  max-width: 540px;
+  min-width: 320px;
+  margin: 0;
+	padding: 0;
+  font-family: PingFangSC-Regular, sans-serif;
+  background: #f5f5f5;
+}
+.pd-btm-20 {
+  @include pd(bottom, 20px);
+}
+
+.w-full {
+  width: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: rgba(0, 0, 0, 0.2);
+	border-left: 2px solid transparent;
+}
+
+::-webkit-scrollbar-track {
+  border-left: 2px solid transparent;
+}
+
+.pd-20 {
+  padding: 20px;
+}
+
+.red-color {
+  color: #f5222d;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}

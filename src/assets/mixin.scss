@@ -1,0 +1,25 @@
+@mixin pd($direction, $px) {
+  @if $direction==top {
+    padding-top: $px;
+  }
+  @if $direction==right {
+    padding-right: $px;
+  }
+  @if $direction==bottom {
+    padding-bottom: $px;
+  }
+  @if $direction==left {
+    padding-left: $px;
+  }
+}
+
+$vm_base: 375;
+@function vm($px) {
+  @return ($px / 375) * 100vw;
+}
+
+// rem 单位换算：定为 75px 只是方便运算，750px-75px、640-64px、1080px-108px，如此类推
+$vm_fontsize: 75; // iPhone 6尺寸的根元素大小基准值
+@function rem($px) {
+  @return ($px / $vm_fontsize ) * 1rem;
+}

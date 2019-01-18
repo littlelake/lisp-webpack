@@ -1,0 +1,1 @@
+export { getPermpisionList, Permpision, permpisionList, checkPrivilege } from './permpision';

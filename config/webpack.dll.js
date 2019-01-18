@@ -1,11 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
-// webpack配置变量
-var CONFIG = require('./webpack.config');
+
+const paths = require('./paths');
 
 module.exports = {
+  mode: 'development',
   entry: {
-    vendor: CONFIG.VENDOR
+    vendor: paths.appVendor
   },
   output: {
     path: path.resolve(__dirname, '../dll'),

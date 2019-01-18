@@ -1,19 +1,44 @@
 {
   "presets": [
-    "react",
-    "es2015",
-    "stage-0",
-    ["env", { "modules": false }]
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "browsers": [
+            "ie >= 7"
+          ]
+        },
+        "modules": "commonjs",
+        "loose": true
+      }
+    ],
+    "@babel/preset-react",
+    [
+      "@babel/preset-typescript",
+      {
+        "isTSX": true,
+        "allExtensions": true
+      }
+    ]
   ],
   "plugins": [
-    "transform-runtime",
-    "transform-class-properties",
+    "react-hot-loader/babel",
+    "@babel/plugin-proposal-class-properties",
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "corejs": false,
+        "helpers": false,
+        "regenerator": true,
+        "useESModules": false
+      }
+    ],
     [
       "import",
       {
-        "libraryName": "antd",
+        "libraryName": "antd-mobile",
         "libraryDirectory": "es",
-        "style": true
+        "style": "css"
       }
     ]
   ]
